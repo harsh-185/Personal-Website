@@ -5,35 +5,40 @@ import { useInView } from "framer-motion"
 import { useRef } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Brain, Award, ImageIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Brain, Award, Zap, Github, ExternalLink, Youtube } from "lucide-react"
+import Link from "next/link"
 
 const projects = [
   {
-    title: "Nebula",
+    title: "Zenny.ai",
     description:
-      "Achieved an accuracy of 94% and 80% for CNN models detecting brain tumors and Alzheimer's. Utilized 300+ DICOM files(CT Scans) to develop an algorithm for a 3D model of the brain. Rewarded with 1st place amongst 300 people in the category for usage of Generative AI.",
-    icon: Brain,
-    color: "from-cyan-500 to-blue-500",
-    skills: ["Flask", "HTML", "CSS", "JavaScript", "CNN", "VTK", "NumPy", "TensorFlow"],
-    date: "October 2023",
+      "Predictive execution co-pilot for Slack/Teams that connects to Jira, Slack, OKR platforms, and wikis to detect misalignment and risks early. Created a working MVP within 1 month. Impact: earlier blocker detection; managers save approximately 4 hours/week on status updates.",
+    icon: Zap,
+    skills: ["AWS", "Python", "LangChain", "Vector DB", "Airweave API"],
+    date: "2024 – Present",
+    link: "https://youtu.be/f4X6736zvsg",
+    linkType: "youtube",
   },
   {
-    title: "CNN Models for Image Classification",
+    title: "Nebula",
     description:
-      "Developed 4 image classification CNN models to identify and differentiate between vehicles, animals, flowers, fruits and vegetables with accuracy ranging from 85% to 95%",
-    icon: ImageIcon,
-    color: "from-purple-500 to-pink-500",
-    skills: ["NumPy", "TensorFlow", "Matplotlib", "CNN"],
-    date: "July 2023",
+      "Built tumor and Alzheimer's classifiers on 300+ DICOM CTs with 3D visualization via VTK; achieved accuracies up to 94% and 80%. Won 1st place in Generative AI category at HackPSU.",
+    icon: Brain,
+    skills: ["Flask", "HTML/CSS/JS", "CNN", "VTK", "NumPy", "TensorFlow"],
+    date: "Oct 2023",
+    link: "https://github.com/Medify-2-0/HackPSU_Fall2023",
+    linkType: "github",
   },
   {
     title: "Signease",
     description:
       "Collaborated with a team of five to design and create a real-time ASL Translator app with an accuracy of 87%, delivering third-place success in a competitive Hack PSU event.",
     icon: Award,
-    color: "from-teal-400 to-emerald-500",
-    skills: ["NumPy", "Matplotlib", "NPM", "TensorFlow", "Random Forest"],
+    skills: ["NumPy", "Matplotlib", "TensorFlow", "Random Forest", "Computer Vision"],
     date: "March 2023",
+    link: "https://github.com/Team-Mustangs/Spring-Hack-PSU",
+    linkType: "github",
   },
 ]
 
@@ -43,17 +48,21 @@ export default function Projects() {
 
   return (
     <section id="projects" ref={ref} className="section relative">
-      {/* Background elements */}
-      <div className="absolute -z-10 top-1/3 left-1/4 h-[250px] w-[250px] rounded-full blur-[150px] bg-pink/10"></div>
-      <div className="absolute -z-10 bottom-1/3 right-1/4 h-[250px] w-[250px] rounded-full blur-[150px] bg-teal/10"></div>
+      {/* Subtle background */}
+      <div className="absolute inset-0 -z-10 dot-pattern opacity-30" />
 
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
         >
-          <h2 className="text-3xl font-bold mb-8 text-center neon-text">Projects</h2>
+          <div className="mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Projects</h2>
+            <p className="text-muted-foreground max-w-xl">
+              A selection of projects I've built, from AI-powered tools to award-winning hackathon submissions.
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
@@ -62,36 +71,53 @@ export default function Projects() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
                 className="h-full"
               >
-                <Card className="glass h-full flex flex-col overflow-hidden animated-border">
-                  <div className={`h-1.5 w-full bg-gradient-to-r ${project.color}`}></div>
+                <Card className="glass h-full flex flex-col card-hover border-border/50">
                   <CardHeader>
-                    <div className="flex items-center gap-2">
-                      <div className={`p-2 rounded-md bg-gradient-to-r ${project.color}`}>
-                        <project.icon className="h-5 w-5 text-white" />
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2.5 rounded-lg bg-primary/10 text-primary">
+                        <project.icon className="h-5 w-5" />
                       </div>
-                      <CardTitle>{project.title}</CardTitle>
+                      <div>
+                        <CardTitle className="text-lg">{project.title}</CardTitle>
+                        <CardDescription className="text-sm">{project.date}</CardDescription>
+                      </div>
                     </div>
-                    <CardDescription>{project.date}</CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p>{project.description}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {project.description}
+                    </p>
                   </CardContent>
-                  <CardFooter className="flex flex-col items-start">
-                    <div className="flex flex-wrap gap-2 mt-4">
+                  <CardFooter className="flex flex-col items-start gap-4">
+                    <div className="flex flex-wrap gap-2">
                       {project.skills.map((skill, i) => (
-                        <Badge
+                        <span
                           key={i}
-                          variant="secondary"
-                          className="badge-glow"
-                          style={{ animationDelay: `${i * 0.05}s` }}
+                          className="badge-minimal"
                         >
                           {skill}
-                        </Badge>
+                        </span>
                       ))}
                     </div>
+                    {project.link && (
+                      <Button asChild variant="outline" size="sm" className="gap-2 w-full">
+                        <Link href={project.link} target="_blank" rel="noopener noreferrer">
+                          {project.linkType === "youtube" ? (
+                            <>
+                              <Youtube className="h-4 w-4" />
+                              Watch Demo
+                            </>
+                          ) : (
+                            <>
+                              <Github className="h-4 w-4" />
+                              View Source
+                            </>
+                          )}
+                        </Link>
+                      </Button>
+                    )}
                   </CardFooter>
                 </Card>
               </motion.div>
